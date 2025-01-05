@@ -1,18 +1,18 @@
 Class {
-	#name : 'MyPawn',
+	#name : 'Pawn',
 	#superclass : 'MyPiece',
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
 }
 
 { #category : 'accessing' }
-MyPawn >> id [
+Pawn >> id [
 
 	^ 'P'
 ]
 
 { #category : 'testing' }
-MyPawn >> isAtStartingPosition [
+Pawn >> isAtStartingPosition [
 
 	^ self isWhite 
 	ifTrue: [ square file = $2 ]
@@ -20,13 +20,14 @@ MyPawn >> isAtStartingPosition [
 ]
 
 { #category : 'rendering' }
-MyPawn >> renderPieceOn: aSquare [ 
+Pawn >> renderPieceOn: aSquare [ 
 	
 	^ aSquare renderPawn: self
 ]
 
 { #category : 'rendering' }
-MyPawn >> targetSquaresLegal: aBoolean [ 
+
+Pawn >> >> targetSquaresLegal: aBoolean [ 
     | legalMoves moveOne moveTwo captureLeft captureRight |
 
     legalMoves := OrderedCollection new.
