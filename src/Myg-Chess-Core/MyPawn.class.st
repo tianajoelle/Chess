@@ -11,6 +11,14 @@ MyPawn >> id [
 	^ 'P'
 ]
 
+{ #category : 'testing' }
+MyPawn >> isAtStartingPosition [
+
+	^ self isWhite 
+	ifTrue: [ square file = $2 ]
+	ifFalse: [ square file = $7 ].
+]
+
 { #category : 'rendering' }
 MyPawn >> renderPieceOn: aSquare [ 
 	
@@ -18,11 +26,23 @@ MyPawn >> renderPieceOn: aSquare [
 ]
 
 { #category : 'rendering' }
-MyPawn >> targetSquaresLegal: aBoolean [
+MyPawn >> targetSquaresLegal: aBoolean [ 
+    | legalMoves moveOne moveTwo |
 
-	^ (self isWhite
-		   ifTrue: [ { square up } ]
-		   ifFalse: [ { square down } ]) select: [ :s |
-		  s notNil and: [
-			  s hasPiece not or: [ s contents color ~= color ] ] ]
+    legalMoves := OrderedCollection new.
+
+    "Définit les mouvements en avant selon la couleur du pion"
+    moveOne := self isWhite ifTrue: [ square up ] ifFalse: [ square down ].
+    moveTwo := self isWhite ifTrue: [ square up up ] ifFalse: [ square down down ].
+
+    "Ajoute le mouvement de 1 case en avant si la case est libre"
+    (moveOne notNil and: [ moveOne hasPiece not ])
+        ifTrue: [ legalMoves addLast: moveOne ].
+
+    "Ajoute le mouvement de 2 cases en avant si le pion est en position initiale et les cases sont libres"
+    (self isAtStartingPosition and: [
+        moveOne hasPiece not and: [ moveTwo hasPiece not ]
+    ]) ifTrue: [ legalMoves addLast: moveTwo ].
+
+^legalMoves
 ]
