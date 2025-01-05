@@ -27,7 +27,7 @@ Pawn >> renderPieceOn: aSquare [
 
 { #category : 'rendering' }
 
-Pawn >> >> targetSquaresLegal: aBoolean [ 
+Pawn >> targetSquaresLegal: aBoolean [ 
     | legalMoves moveOne moveTwo captureLeft captureRight |
 
     legalMoves := OrderedCollection new.
