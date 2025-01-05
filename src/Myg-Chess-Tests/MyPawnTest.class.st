@@ -6,6 +6,33 @@ Class {
 }
 
 { #category : 'tests' }
+MyPawnTest >> testDiagonalCapture [
+    | board whitePawn blackPawn legalMoves |
+
+    "Création d'un plateau vide"
+    board := MyChessBoard empty.
+    
+    "Création d'un pion blanc et d'un pion noir"
+    whitePawn := MyPawn white.
+    blackPawn := MyPawn black.
+
+    "Place un pion blanc sur la case 'd4'"
+    board at: 'd4' put: whitePawn.
+    
+    "Place un pion noir en diagonale sur les cases 'c5' et 'e5'"
+    board at: 'c5' put: blackPawn.
+    board at: 'e5' put: blackPawn.
+
+    "Récupère les mouvements légaux du pion blanc"
+    legalMoves := whitePawn targetSquaresLegal: true.
+
+    "Vérifie que le pion blanc peut capturer en diagonale"
+    self assert: (legalMoves includes: (board at: 'c5')).
+    self assert: (legalMoves includes: (board at: 'e5')).
+
+]
+
+{ #category : 'tests' }
 MyPawnTest >> testInitialDoubleMove [
     | pawn board legalMoves |
 
