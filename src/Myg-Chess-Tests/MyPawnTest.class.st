@@ -13,8 +13,8 @@ MyPawnTest >> testDiagonalCapture [
     board := MyChessBoard empty.
     
     "Création d'un pion blanc et d'un pion noir"
-    whitePawn := MyPawn white.
-    blackPawn := MyPawn black.
+    whitePawn := Pawn white.
+    blackPawn := Pawn black.
 
     "Place un pion blanc sur la case 'd4'"
     board at: 'd4' put: whitePawn.
@@ -38,7 +38,7 @@ MyPawnTest >> testInitialDoubleMove [
 
     "Création d'un plateau et d'un pion blanc"
     board := MyChessBoard empty.
-    pawn := MyPawn white.
+    pawn := Pawn white.
 
     "Place un pion blanc sur la case 'd2' (position initiale)"
     board at: 'd2' put: pawn.
@@ -56,8 +56,8 @@ MyPawnTest >> testIsAtStartingPosition [
 | board whitePawn blackPawn |
     
     board := MyChessBoard empty.
-    whitePawn := MyPawn white.
-    blackPawn := MyPawn black.
+    whitePawn := Pawn white.
+    blackPawn := Pawn black.
 
     "Place un pion blanc en position initiale sur la case 'd2'"
     board at: 'd2' put: whitePawn.
