@@ -27,7 +27,7 @@ MyPawn >> renderPieceOn: aSquare [
 
 { #category : 'rendering' }
 MyPawn >> targetSquaresLegal: aBoolean [ 
-    | legalMoves moveOne moveTwo |
+    | legalMoves moveOne moveTwo captureLeft captureRight |
 
     legalMoves := OrderedCollection new.
 
@@ -44,5 +44,19 @@ MyPawn >> targetSquaresLegal: aBoolean [
         moveOne hasPiece not and: [ moveTwo hasPiece not ]
     ]) ifTrue: [ legalMoves addLast: moveTwo ].
 
-^legalMoves
+    "Définit les captures en diagonale"
+    captureLeft := self isWhite
+        ifTrue: [ square up left ]
+        ifFalse: [ square down left ].
+    captureRight := self isWhite
+        ifTrue: [ square up right ]
+        ifFalse: [ square down right ].
+
+    "Ajoute les cases de capture si elles contiennent une pièce adverse"
+    (captureLeft notNil and: [ captureLeft hasPiece and: [ captureLeft contents color ~= self color ]])
+        ifTrue: [ legalMoves addLast: captureLeft ].
+    (captureRight notNil and: [ captureRight hasPiece and: [ captureRight contents color ~= self color ]])
+        ifTrue: [ legalMoves addLast: captureRight ].
+
+    ^legalMoves
 ]
