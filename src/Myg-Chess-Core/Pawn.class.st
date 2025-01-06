@@ -1,6 +1,11 @@
 Class {
 	#name : 'Pawn',
 	#superclass : 'MyPiece',
+	#instVars : [
+		'captureState',
+		'forwardState',
+		'Square'
+	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
 }
@@ -11,12 +16,30 @@ Pawn >> id [
 	^ 'P'
 ]
 
-{ #category : 'testing' }
-Pawn >> isAtStartingPosition [
+{ #category : 'initialization' }
+Pawn >> initialize [ 
+    super initialize.
+    forwardState := InitialForwardState new.
+    captureState := DiagonalCaptureState new.
+]
 
-	^ self isWhite 
-	ifTrue: [ square file = $2 ]
-	ifFalse: [ square file = $7 ].
+{ #category : 'as yet unclassified' }
+Pawn >> legalMoves [
+    | moves |
+    moves := OrderedCollection new.
+    
+    "Ajoute les mouvements d'avance depuis l'état actuel"
+    moves addAll: (forwardState legalMovesFor: self).
+
+    "Ajoute les mouvements de capture depuis l'état actuel"
+    moves addAll: (captureState legalMovesFor: self).
+
+    ^ moves
+]
+
+{ #category : 'as yet unclassified' }
+Pawn >> promoteToNormalForward [
+forwardState := NormalForwardState new.
 ]
 
 { #category : 'rendering' }
@@ -25,39 +48,21 @@ Pawn >> renderPieceOn: aSquare [
 	^ aSquare renderPawn: self
 ]
 
-{ #category : 'rendering' }
+{ #category : 'initialization' }
+Pawn >> resetCaptureState [
+captureState := DiagonalCaptureState new.
+]
 
-Pawn >> targetSquaresLegal: aBoolean [ 
-    | legalMoves moveOne moveTwo captureLeft captureRight |
+{ #category : 'as yet unclassified' }
+Pawn >> targetSquaresLegal [
+| moves |
+    moves := OrderedCollection new.
 
-    legalMoves := OrderedCollection new.
+    "Ajoute les mouvements en avant"
+    moves addAll: (forwardState legalMovesFor: self).
 
-    "Définit les mouvements en avant selon la couleur du pion"
-    moveOne := self isWhite ifTrue: [ square up ] ifFalse: [ square down ].
-    moveTwo := self isWhite ifTrue: [ square up up ] ifFalse: [ square down down ].
+    "Ajoute les captures"
+    moves addAll: (captureState legalMovesFor: self).
 
-    "Ajoute le mouvement de 1 case en avant si la case est libre"
-    (moveOne notNil and: [ moveOne hasPiece not ])
-        ifTrue: [ legalMoves addLast: moveOne ].
-
-    "Ajoute le mouvement de 2 cases en avant si le pion est en position initiale et les cases sont libres"
-    (self isAtStartingPosition and: [
-        moveOne hasPiece not and: [ moveTwo hasPiece not ]
-    ]) ifTrue: [ legalMoves addLast: moveTwo ].
-
-    "Définit les captures en diagonale"
-    captureLeft := self isWhite
-        ifTrue: [ square up left ]
-        ifFalse: [ square down left ].
-    captureRight := self isWhite
-        ifTrue: [ square up right ]
-        ifFalse: [ square down right ].
-
-    "Ajoute les cases de capture si elles contiennent une pièce adverse"
-    (captureLeft notNil and: [ captureLeft hasPiece and: [ captureLeft contents color ~= self color ]])
-        ifTrue: [ legalMoves addLast: captureLeft ].
-    (captureRight notNil and: [ captureRight hasPiece and: [ captureRight contents color ~= self color ]])
-        ifTrue: [ legalMoves addLast: captureRight ].
-
-    ^legalMoves
+    ^ moves.
 ]
