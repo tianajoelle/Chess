@@ -16,3 +16,9 @@ BlackPawn >> renderPieceOnWhiteSquare [
 
 	^ 'O'.
 ]
+
+{ #category : 'as yet unclassified' }
+BlackPawn >> targetSquaresLegal: aBoolean [
+"Comportement spécifique à BlackPawn, ou appeler la méthode de base"
+    ^ super targetSquaresLegal: aBoolean.
+]
