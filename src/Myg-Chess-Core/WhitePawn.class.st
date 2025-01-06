@@ -16,9 +16,3 @@ WhitePawn >> renderPieceOnWhiteSquare [
 
 	^ 'P'.
 ]
-
-{ #category : 'as yet unclassified' }
-WhitePawn >> targetSquaresLegal: aBoolean [
-"Comportement spécifique à WhitePawn, ou appeler la méthode de base"
-    ^ super targetSquaresLegal: aBoolean.
-]
