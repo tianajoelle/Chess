@@ -10,13 +10,25 @@ InitialForwardState >> legalMovesFor: aPawn [
 	| legalMoves moveOne moveTwo |
 
     legalMoves := OrderedCollection new.
-    moveOne := aPawn isWhite ifTrue: [ aPawn square up ] ifFalse: [ aPawn square down ].
-    moveTwo := aPawn isWhite ifTrue: [ aPawn square up up ] ifFalse: [ aPawn square down down ].
+
+    moveOne := aPawn isWhite
+        ifTrue: [ aPawn square up ]
+        ifFalse: [ aPawn square down ].
+
+    moveTwo := aPawn isWhite
+        ifTrue: [ aPawn square up up ]
+        ifFalse: [ aPawn square down down ].
 
     (moveOne notNil and: [ moveOne hasPiece not ])
         ifTrue: [ legalMoves addLast: moveOne ].
-    (moveTwo notNil and: [ moveOne hasPiece not and: [ moveTwo hasPiece not ] ])
-        ifTrue: [ legalMoves addLast: moveTwo ].
 
-    ^legalMoves.
+    (aPawn isAtStartingPosition and: [
+        moveTwo notNil and: [
+            moveOne hasPiece not and: [
+                moveTwo hasPiece not
+            ]
+        ]
+    ]) ifTrue: [ legalMoves addLast: moveTwo ].
+
+    ^ legalMoves
 ]
