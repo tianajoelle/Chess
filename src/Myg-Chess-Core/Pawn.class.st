@@ -54,8 +54,8 @@ captureState := DiagonalCaptureState new.
 ]
 
 { #category : 'as yet unclassified' }
-Pawn >> targetSquaresLegal [
-| moves |
+Pawn >> targetSquaresLegal: aBoolean [
+	| moves |
     moves := OrderedCollection new.
 
     "Ajoute les mouvements en avant"
@@ -64,5 +64,5 @@ Pawn >> targetSquaresLegal [
     "Ajoute les captures"
     moves addAll: (captureState legalMovesFor: self).
 
-    ^ moves.
+    ^ moves
 ]
